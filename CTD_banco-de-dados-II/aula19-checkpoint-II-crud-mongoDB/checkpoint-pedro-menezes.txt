@@ -1,0 +1,36 @@
+Banco de Dados II - Checkpoint
+19/09/2022
+
+Pedro Menezes
+
+1. Crie um banco de dados chamado DHFitness e uma coleção com o nome relatorioDiario
+> use DHFitness
+> db.createCollection("relatorioDiario")
+
+2. Importe o arquivo relatorioDiario para a coleção que você criou
+> importado via MongoDB Compass
+
+3.  Insira um novo registro na coleção relatorioDiario com os seguintes dados: 
+_id: 222776
+atividade: ‘Corrida’
+medicao: ‘Distancia’
+unidadeMedida: ‘metros’
+dataRel: ‘2022-05-17’
+valor: 1232
+usuarioId: 16
+> db.relatorioDiario.insertOne({_id: 222776, atividade: "Corrida", medicao: "Distancia", unidadeMedida: "metros", dataRel: 2022-05-17, valor: 1232, usuarioId: 16})
+
+4. Atualize todas as atividades cadastradas como Correr para Corrida
+> db.relatorioDiario.updateMany({atividade: "Correr"}, {$set: {atividade: "Corrida"}})
+
+5. Liste todos os registros dos usuários que praticaram Ciclismo.
+> db.relatorioDiario.find({atividade:"Ciclismo"})
+
+6. Atualize todas as atividades cadastradas como Natacao para Natação
+> db.relatorioDiario.updateMany({atividade: "Natacao"}, {$set: {atividade: "Natação"}})
+
+7. Liste todas as atividades, tomando o cuidado para não repetir nenhuma
+> db.relatorioDiario.distinct("atividade")
+
+8. Exclua o _id de número 222699
+> db.relatorioDiario.deleteOne({_id: 222699})

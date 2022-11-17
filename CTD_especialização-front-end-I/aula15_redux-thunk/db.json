@@ -1,0 +1,19 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "text": "learn react",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "text": "learn redux",
+      "completed": false
+    },
+    {
+      "id": 3,
+      "text": "learn thunk",
+      "completed": true
+    }
+  ]
+}

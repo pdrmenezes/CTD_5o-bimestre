@@ -1,0 +1,90 @@
+- Indexes simples ou de campo único (o número "1" significa que queremos ordenar o index em ordem crescente, para decrescente, usar "-1")
+  db.filmes.ensureIndex({"\_id": 1})
+
+- Indexes compostos (múltiplos campos)
+  O index gerado agrupará primeiro os dados pelo campo "titulo" e depois pelo campo "genero"
+  Indexes compostos permitem consultar um ou mais campos, sem ter que incluir todos. No exemplo abaixo podemos consultar tanto pelo título do filme quanto pelo gênero
+  db.filmes.ensureIndex({titulo: 1, genero: -1})
+
+- Indexes únicos são necessários para conter valores únicos. Conseguimos isso adicionando o parâmetro "unique" ao criá-los
+  Caso se tente inserir valores repetidos em um campo com um index único, o MongoDB retornará um erro
+  db.filmes.ensureIndex({\_id: 1}, {"unique": true})
+
+- Indexes esparsos incluem todos os documentos, até mesmo aqueles que não contêm o campo indexado.
+  O MongoDB não nos obriga a usar um esquema, portanto, não há exigência de que os campos existam no documento.
+  Neste caso, o campo user_name pode ou não estar no documento.
+  Para criar indexes que incluam apenas documentos cujo campo indexado exista, usaremos o parâmetro "sparse".
+  db.users.ensureIndex({"user_name" : 1}, {"sparse":true})
+
+- Indexes de Texto devem ser uma string ou um array de elementos string.
+  Podemos criar índices de texto usando o método db.collectionName.createIndex().
+  db.filmes.createIndex({titulo: "text"})
+  'titulo_text'
+
+  Para pesquisar com o índice de texto, usamos:
+  db.filmes.find({$text:{$search: "Harry"}}).pretty()
+
+  saída:
+  {
+  \_id: ObjectId("61f75b04cae35901929407b2"),
+  id: 8,
+  titulo: 'Harry Potter e a pedra filosofal',
+  avaliacao: Decimal128("10.00"),
+  premios: 1,
+  data_lancamento: 2008-04-04T03:00:00.000Z,
+  duracao: 120,
+  genero: 'Aventuras'
+  },
+  {
+  \_id: ObjectId("61f75b04cae35901929407b3"),
+  id: 9,
+  titulo: 'Harry Potter e a câmara secreta',
+  avaliacao: Decimal128("3.50"),
+  premios: 2,
+  data_lancamento: 2009-04-08T03:00:00.000Z,
+  duracao: 200,
+  genero: 'Aventuras'
+  },
+  {
+  \_id: ObjectId("61f75b04cae35901929407b0"),
+  id: 6,
+  titulo: 'Harry Potter e as Relíquias da Morte - Parte 2',
+  avaliacao: Decimal128("9.00"),
+  premios: 2,
+  data_lancamento: 2008-04-07T03:00:00.000Z,
+  duracao: 190,
+  genero: 'Suspense'
+  }
+
+  Foram encontrados 3 filmes cujo título possuía o termo "Harry".
+
+  Para visualizarmos o índice de texto criado, utilizamos o comando:
+
+  db.filmes.getIndexes()
+  saída:
+  [
+    { v: 2, key: { _id: 1 }, name: '_id_' },
+    { v: 2, key: { titulo: 1, genero: -1 }, name: 'titulo_1_genero_-1' },
+    { v: 2, key: { _fts: 'text', _ftsx: 1 }, name: 'titulo_text', weights: { titulo: 1 }, default_language: 'english',
+    =-
+    language_override: 'language', textIndexVersion: 3
+    }
+  ]
+
+  Para eliminarmos o índice de texto, utilizamos o método dropIndex().
+  db.filmes.dropIndex("titulo_1_genero_-1")
+  saída:
+  { nIndexesWas: 3, ok: 1 }
+
+- Index curinga
+  Usando o especificador curinga ($**) você tem permissão para criar vários campos de index de texto. Devido ao index de texto curinga, o MongoDB indexa todo e qualquer campo que contenha dados de string em todos os documentos presentes na coleção fornecida. O index de texto curinga é útil para dados não estruturados onde não sabemos qual campo contém dados de string ou para consulta ad-hoc. Permite pesquisar texto em todos os campos que contêm dados de string. O index de texto curinga pode fazer parte do index composto.
+  sdb.filmes.createIndex({ "$**": "text" })
+
+- Especifique os pesos
+  Para um index de texto, o peso de um campo indexado é a importância do campo. Para cada campo de índice no documento, o MongoDB soma os resultados, multiplicando o número de correspondências por peso. Agora, usando essa soma, o MongoDB calcula a pontuação do documento. O peso padrão do campo de index é 1 e você pode ajustar o peso do index usando o método createIndex().
+  Exemplo:
+  db.filmes.createIndex({titulo:"text", genero:"text"},
+  {weights:{titulo:10, genero:5},
+  name:"TextIndex"})
+
+  Aqui, o peso dos campos título e gênero são 10 e 5

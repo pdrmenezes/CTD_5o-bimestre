@@ -1,0 +1,63 @@
+1) Instalar as bibliotecas @reduxjs/toolkit e react-redux.
+
+2) Criar arquivo store que vai conter as configurações dos estados da nossa aplicação. Ex:
+
+import { configureStore } from '@reduxjs/toolkit'
+import countReducer from './counterState'
+
+export default configureStore({
+  reducer: {},
+})
+
+
+3) Adicionar o provider do react-redux na aplicação. Ex:
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import store from './store';
+import { Provider } from 'react-redux';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
+);
+
+4) Implementar o módulo count usando a função createSlice da biblioteca @reduxjs/toolkit. Ex:
+
+import { createSlice } from '@reduxjs/toolkit'
+
+export const counterSlice = createSlice({
+  name: 'counter',
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      state.value += 1
+    },
+  },
+});
+
+const reducer = counterSlice.reducer;
+const { increment } = counterSlice.actions;
+
+export { increment };
+export default reducer;
+
+
+5) Adicionar o módulo count na store. Ex:
+
+import { configureStore } from '@reduxjs/toolkit'
+import countReducer from './counterState'
+
+export default configureStore({
+  reducer: {
+    count: countReducer,
+  },
+})

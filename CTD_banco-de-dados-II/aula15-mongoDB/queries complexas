@@ -1,0 +1,199 @@
+No MySQL existem operadores e funções que nos permitem criar consultas mais específicas, como SUM, MAX, AVG, LIKE e BETWEEN. 
+
+No MongoDB também utilizamos operadores e funções, que permitem a realização de consultas complexas em seus dados. As boas práticas orientam incluir, em uma única entidade, todos ou quase todos os dados que necessitamos. Assim conseguimos, na maioria das vezes, utilizar uma única consulta por _id, que é a maneira mais eficiente de se recuperar dados,  reduzindo o número de requisições e garantindo a performance.
+
+- Funções de agregação
+{$group} - é equivalente ao 'group by' do MySQL.
+Neste exemplo, utilizamos a agregação para trazer a quantidade de filmes por gênero:
+
+db.filmes.aggregate([{$group: {_id: "$genero",Total: {$sum: 1}}}])
+
+{ _id: 'Drama', Total: 3 }
+{ _id: 'Suspense', Total: 1 }
+{ _id: 'Infantil', Total: 2 }
+{ _id: 'Aventura', Total: 3 }
+{ _id: 'Animação', Total: 4 }
+{ _id: 'Ficção Científica', Total: 5 }
+{ _id: 'Comédia', Total: 1 }
+
+{$group}+{$push} - O operador $push agrega uma matriz de todos os valores resultantes do campo título à nossa consulta.
+Criaremos consulta que retorne o gênero, a quantidade de filmes e o nome dos filmes:
+
+db.filmes.aggregate([ {$group:{ _id:"$genero", total : {$sum:1}, acervo: {$push: "$titulo"} } }])
+
+{ _id: 'Drama',
+  total: 3,
+  acervo: [ 'Titanic', 'A vida é bela', 'I am Sam' ] }
+{ _id: 'Infantil',
+  total: 2,
+  acervo: [ 'O Rei Leão', 'Hotel Transylvania' ] }
+{ _id: 'Ficção Científica',
+  total: 5,
+  acervo: 
+   [ 'Avatar',
+     'Star Wars: Episodio VI',
+     'Star Wars: Episodio VII',
+     'Jurassic Park',
+     'Transformers: o lado escuro da Lua' ] }
+{ _id: 'Animação',
+  total: 4,
+  acervo: [ 'Procurando Nemo', 'Toy Story', 'Toy Story 2', 'Divertidamente' ] }
+{ _id: 'Aventura',
+  total: 3,
+  acervo: 
+   [ 'Harry Potter e a Pedra Filosofal',
+     'Harry Potter e a Câmara Secreta',
+     'Big' ] }
+{ _id: 'Comédia', total: 1, acervo: [ 'Meu pobre anjinho' ] }
+{ _id: 'Suspense',
+  total: 1,
+  acervo: [ 'Harry Potter e as Relíquias da Morte - Parte 2' ] }
+
+Os operadores de atualização permitem modificar ou adicionar os dados em seu banco de dados. São eles:
+{$addToSet} - Adiciona elementos distintos a uma matriz.
+{$pop} - Remove o primeiro ou o último item de uma matriz.
+{$pull} - Remove todos os elementos da matriz que correspondem a uma consulta especificada.
+{$push} - Adiciona um item a uma matriz.
+{$pullAll} - Remove todos os valores correspondentes de uma matriz.
+
+
+- Função {$lookup}
+{$lookup} - Equivalente ao left join do MySQL. Executa uma associação externa esquerda a outra coleção no mesmo banco de dados. Para cada documento de entrada, o estágio $lookup adiciona um novo campo de matriz cujos elementos são os documentos correspondentes da coleção "joined". O estágio $lookup passa esses documentos reformulados para o próximo estágio.
+
+Exemplo:
+db.atorFilme.aggregate([
+    {
+        '$lookup': {
+            'from': 'filmes',  // coleção externa
+            'localField': 'filme',  // nome do campo atual a comparar com o campo da coleção externa
+            'foreignField': 'titulo',  // nome do campo da coleção externa
+            'as': 'genero' // nome do novo campo que vai receber os valores pesquisados.
+      	  }
+         }
+    ]
+)
+
+saída:
+{
+  _id: 1,
+  nome: "Sam",
+  sobrenome: "Worthington",
+  filme: "Avatar",
+  genero: 
+  [
+    {
+      _id: 1,
+      titulo: "Avatar",
+      avaliacao: 7.9,
+      premios: 3,
+      data_lancamento: 2010-04-10T03:00:00.000Z,
+      duracao: 120,
+      genero: "Ficção Científica"
+    }
+  ]
+}
+
+O array 'genero' foi o nome dado para o novo campo que receberá o resultado da pesquisa que retorna todos os dados da coleção externa. Logo, 'genero' recebe como array todos os dados da coleção 'filmes'
+
+Para capturar apenas o campo 'genero' utilizaremos o {$unwind}
+
+{$unwind} - desconstrói um campo de matriz (array) e o transforma em objeto, permitindo a captura do campo da tabela externa.
+Exemplo: 
+{$unwind: {
+  path: "$genero"
+}}
+
+O campo 'genero', neste caso, é o novo campo que criamos para receber o resultado da consulta à coleção externa, como um array.
+O $unwind destrói esse array e o transforma em objeto, facilitando, assim, a captura do campo desejado e, finalmente, criamos um novo campo 'genero' com o 'genero' recuperado da coleção 'filmes':
+
+genero: {
+  $addToSet: "$genero.genero"
+}
+
+Aqui, agrupamos nossa consulta por filmes e trazemos o título do filme, a quantidade de atores e listamos todos os atores, concatenando o nome e o sobrenome
+{$group:{
+  _id: "$filme",
+  atores: {
+    $sum: 1
+  },
+  elenco: {
+    $push: {
+      $concat: [
+        "$nome", " ", "$sobrenome"
+      ]
+    }
+  }
+}}
+
+saída:
+{
+  _id: "Avatar",
+  atores: 3,
+  elenco: ["Sam Worthington", "Zoe Saldana", "Sigourney Weaver"],
+  genero: ["Ficção Científica"]
+}
+
+{$exists} - verifica se na coleção existe determinado campo
+No exemplo verificamos se o campo "genero" existe. Se existir, listamos os filmes que não pertencem aos gêneros citados
+db.filmes.find({genero: {$exists: true, $nin: ["Ficção Científica", "Suspense", "Drama", "Aventura", "Animação"]}})
+
+saída:
+{
+  _id: 10,
+  titulo: "O Rei Leão",
+  avaliacao: 9.1,
+  premios: 3,
+  data_lancamento: 2000-04-02T03:00:00.000Z,
+  genero: "Infantil"
+},
+{
+  _id: 15,
+  titulo: "Meu Pobre Anjinho",
+  avaliacao: 3.2,
+  premios: 1,
+  data_lancamento: 1989-04-01T03:00:00.000Z,
+  genero: "Comédia"
+}
+
+{$like} - para listar filmes cujos gêneros contenham %ra%, no MongoDB substituímos o '% %' por '/ /'
+No exemplo, listamos todos os filmes cujo gênero comece com a sequência 'In':
+
+db.filmes.find({ genero: /^In/ })
+
+saída:
+{
+  _id: 10,
+  titulo: "O Rei Leão",
+  avaliacao: 9.1,
+  premios: 3,
+  data_lancamento: 2000-04-02T03:00:00.000Z,
+  genero: "Infantil"
+},
+{
+  _id: 19,
+  titulo: "Hotel Transylvania",
+  avaliacao: 7.1,
+  premios: 1,
+  data_lancamento: 2012-04-05T03:00:00.000Z,
+  duracao: 90,
+  genero: "Infantil"
+}
+
+Se quisermos listar todos os gêneros que possuem em algum lugar a sílaba 'ra':
+db.filmes.find({ "genero": /ra/ })
+
+- Operadores de comparação
+{$eq} - equals: valores iguais a um valor especificado
+{$gt} - greater: valores maiores que um valor especificado
+{$gte} - greater than or equal: valores iguais a um valor especificado
+{$in} - in: qualquer um dos valores passados em um array
+{$lt} - lower than: valores menores que um valor especificado
+{$lte} - lower than or equal: valores menores ou iguais a um valor especificado
+{$ne} - not equal: valores diferentes de um valor especificado
+{$nin} - not in: nenhum dos valores passados em um array
+
+- Operadores lógicos
+{$and} - todos os documentos que correspondem a ambas as condições
+{$not} - todos os documentos que não correspondem à condição
+{$nor} - junta cláusulas de consulta e lógica e retorna todos os documentos que não correspondem a ambas as condições
+{$or} - une cláusulas de consulta e lógica e retorna todos os documentos que correspondem às condições de qualquer uma das cláusulas

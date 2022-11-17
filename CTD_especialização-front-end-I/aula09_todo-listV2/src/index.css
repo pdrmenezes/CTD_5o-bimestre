@@ -1,0 +1,26 @@
+
+form {
+  position: absolute;
+  bottom: 5%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+input {
+
+  height: 100%;
+  width: calc(100% - 200px);
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 1.2em;
+  padding: 0.5em;
+}
+
+#list {
+  display: flex;
+  justify-content: center;
+  width: calc(100% - 200px);
+  overflow: auto;
+  max-height: 800px;
+}

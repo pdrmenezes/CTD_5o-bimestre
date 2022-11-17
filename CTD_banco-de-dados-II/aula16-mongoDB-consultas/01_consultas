@@ -1,0 +1,26 @@
+1. listar todos os registros e ordenar por genero, decrescente
+
+   > db.musimundos.find().sort({genero: -1})
+
+2. listar todos os registros com genero = Rock
+
+   > db.musimundos.find({genero: "Rock"})
+
+3. listar todos os registros com compositor = AC/DC ordenados por música, decrescente
+
+   > db.musimundos.find({compositor: "AC/DC"}).sort({musica: -1})
+
+4. contar quantos registros com genero = Jazz
+
+   > db.musimundos.find({genero: "Jazz"}).count()
+
+5. albuns que começam em “Up”
+
+   > db.musimundos.find({album: /^Up/}).limit(3)
+
+6. albuns que terminam em “all”
+
+   > db.musimundos.find({album: /all$/}).limit(3)
+
+7. compositores únicos
+   > db.musimundos.distinct("compositor")

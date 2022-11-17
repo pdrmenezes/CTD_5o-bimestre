@@ -1,0 +1,165 @@
+1. Install Redux Saga
+   npm install redux-saga
+   yarn add redux-saga
+
+2. Configure Store
+
+- criar pasta "sagas"
+- criar arquivo sagas.js/sagas.ts
+- importar {createSagaMiddleware} do 'redux-saga' e {applyMiddleware, createStore} do 'redux' e arquivo index.js
+- criar middleware 'const sagaMiddleware = createSagaMiddleware()'
+- passar middleware criado como parâmetro para a função 'applyMiddleware' dentro da função de configuração 'createStore()'
+- inicializar middleware, referenciando a variável que recebe o middleware e acessando a função 'run()' dentro dele, passando como parâmetro o arquivo index.js que criamos
+
+Exemplo de Store:
+
+# importação do applyMiddleware
+
+import { createStore, applyMiddleware } from 'redux'
+
+# importação do createSagaMiddleware
+
+import createSagaMiddleware from 'redux-saga'
+
+# importação dos sagas arquivo index.js que criamos
+
+import sagas from './sagas'
+
+# importação de um Reducer
+
+import orderReducer from './reducer/order'
+
+# criação do middleware
+
+const sagaMiddleware = createSagaMiddleware()
+
+# configuração da Store adicionando o Saga
+
+const store = createStore(orderReducer, applyMiddleware(sagaMiddleware))
+
+# inicialização do sagaMiddleware passando o arquivo Saga como parâmetro
+
+sagaMiddleware.run(sagas)
+
+3. Importar Saga Effects no index.js que criamos na pasta sagas
+   import { call, all, put, takeLatest, takeEvery } from 'redux-saga/effects'
+
+- call: Effect utilizado para executar uma função preservando a padronização do Saga. Ele espera uma função como primeiro parâmetro e, como segundo parâmetro, os parâmetros que serão passados para a função declarada no primeiro parâmetro
+
+Exemplo:
+import { call } from 'redux-saga/effects'
+
+# função que removerá espaços em branco de uma palavra
+
+function removeSpaces(word){
+wordSplited = word.split(' ')
+return wordSplited
+}
+
+# executando a função criada anteriormente utilizando o Call Effect
+
+function mySaga(){
+console.log(call (removeSpaces, 'John Doe'))
+}
+
+- put: Effect utilizado para executar uma Action dentro da função em um arquivo Saga
+
+Exemplo:
+import { put } from 'redux-saga/effects'
+import { productActions } from '../../Actions/Products'
+
+# função que executa a Action deleteProduct por meio do Put Effect
+
+function deleteProductSaga(productId){
+put(productActions.deleteProduct(productId))
+}
+
+- takeEvery: executa algo toda vez que a Action disparada for igual à Action passada como parâmetro
+
+Exemplo:
+import { takeEvery } from 'redux-saga/effects'
+import { productActions } from '../../Actions/Products'
+
+function deleteUserSaga(){
+...
+}
+function rootSaga(){
+takeEvery(productActions.deleteProduct, deleteUserSaga)
+}
+
+- takeLatest: parecido com o takeEvery, porém ao ser usado cancela todas as execuções anteriores e mantém apenas a atual
+
+Exemplo:
+import { takeLatest } from 'redux-saga/effects'
+import { productActions } from '../../Actions/Products'
+
+function deleteUserSaga(){
+...
+}
+function rootSaga(){
+takeLatest(productActions.deleteProduct, deleteUserSaga)
+}
+
+### Função Geradora com yield
+
+Para criar uma Função Geradora acrescentamos um asterisco após a palavra function
+
+# função normal
+
+function makeOrderSaga(){}
+
+# função geradora
+
+function\* makeOrderSaga(){}
+
+Em uma Função Geradora trocamos a palavra 'return' por 'yield'
+
+# função normal
+
+function makeOrderSaga(){
+return 'success'
+}
+
+# função geradora
+
+function\* makeOrderSaga(){
+yield 'success'
+}
+
+O retorno/yield de uma Função Geradora é um objeto com 2 atributos: Value (valor retornado) e Done (status atual da função, se foi realizada ou não)
+{
+value: 'success',
+done: false
+}
+
+4. Com uma Função Geradora criaremos a função 'makeOrderSaga()' responsável por conter toda a lógica necessária para realizar pedidos
+
+- utilizaremos o Effect Call para realizar uma chamada à API, onde o 1º parâmetro será a função que realizará a chamada à API (nesse caso, a makeOrder) e como 2º parâmetro (os que serão necessários para o uso do 1º param), passamos os pedidos obtidos da variável 'order' que obtém os itens do carrinho pelo 'getState' do Redux
+- após retorno bem-sucedido da requisição utilizaremos o Effect Put para disparar uma Action (no caso, clearCart) que limpará os itens do carrinho contidos na Store do Redux
+- após criação da função 'makeOrderSaga()' criaremos e exportaremos outra Função Geradora 'sagas()', que utilizaremos no arquivo da Store
+- a função 'sagas()' retornará o Effect takeEvery, em que passaremos como 1º parâmetro a Action que disparará a função Saga criada anteriormente (makeOrderSaga()) e, como 2º parâmetro, qual função será disparada (makeOrderSaga())
+- assim, sempre que dispararmos a Action 'makeOrder', toda a lógica contida no 'makeOrderSaga()' será executada efetuando pedido e limpando o carrinho
+
+Exemplo:
+
+# função Saga que salvará o pedido e disparará uma Action
+
+function\* makeOrderSaga(){
+
+# obtenção de produtos adicionados ao carrinho pelo state da Store
+
+const order = getState().cartProducts
+try { # requisição feita utilizando o Call Effect
+const request = yield call(api.makeOrder, order) # disparo da Action para limpar o carrinho caso a requisição seja bem-sucedida
+yield put(cartAction.clearCart, ())
+} catch(error)
+}
+
+# exportação da função 'sagas' que conterá todos os sagas criados. será utilizada na Store para inicializá-las, após sua configuração, dentro da função 'run()'
+
+export default function\* sagas(){
+
+# utilização do Effect takeEvery pra executar a função makeOrderSaga toda vez que for chamada (em cada chamada da Action 'makeOrder' dentro do arquivo cartActions)
+
+yield takeEvery(cartAction.makeOrder, makeOrderSaga)
+}

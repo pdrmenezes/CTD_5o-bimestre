@@ -1,0 +1,26 @@
+# agregar filmes por gênero e contar registros
+db.filmes.aggregate([{$group: {_id: '$genero', Total: {$sum: 1}}}])
+
+#
+db.filmes.find({}, {titulo:1, _id:0}).sort({titulo:1})
+
+# listando todos os filmes com titulo e avaliacao, ordenados por avaliacao em ordem decrescente
+db.filmes.find({}, {titulo: 1, avaliacao: 1, _id:0}).sort({avaliacao: -1})
+
+# atualize os campos ‘duracao’ que atualmente possuem valor nulo para ’80’
+db.filmes.updateMany({duracao: null}, {$set:{duracao:80}})
+
+# inserir 1 registro
+db.filmes.insertOne({_id: 20, titulo: "A Pequena Sereia", avaliacao: 8.3, premios: 5, data_lancamento: "1989-12-11", duracao: 120, genero: "Infantil"})
+
+# atualize genero de documento com id = 6 pra "Aventura"
+db.filmes.updateOne({_id: 6}, {$set:{genero: "Aventura"}})
+
+# excluir o filme com a menor avaliação
+db.filmes.deleteMany({avaliacao: {$lt:1}})
+
+# excluir collection
+db.filmes.drop()
+
+# excluir db - certificar-se que está no db certo
+db.dropDatabase()

@@ -1,0 +1,51 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+body {
+  background-color: whitesmoke;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  min-width: 60vw;
+}
+
+#inbox {
+  display: flex;
+  border: 2px solid #333;
+  border-radius: 12px;
+  background-color: khaki;
+}
+
+#messages-list {
+  width: 35%;
+  flex-direction: column;
+  overflow-y: auto;
+  border-right: 2px solid #333;
+  align-items: flex-start;
+  text-align: left;
+}
+
+#messages-list div {
+  cursor: pointer;
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+  border-radius: 12px;
+}
+
+#messages-list div:hover {
+  cursor: pointer;
+  background-color: lightcoral;
+  border-radius: 12px;
+}
+
+#message-shown {
+  width: 65%;
+  text-align: left;
+  padding: 1rem;
+}

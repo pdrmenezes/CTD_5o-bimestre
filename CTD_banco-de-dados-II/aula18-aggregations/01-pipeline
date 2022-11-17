@@ -1,0 +1,28 @@
+/* pipeline que listará contatos ocultando campo id / cuja idade > 30 / ordenando alfabeticamente pelo campo nome / agrupando e contando pessoas por estado */
+[
+  {
+    "$project": {
+      "_id": 0
+    }
+  },
+  {
+    "$match": {
+      "idade": {
+        "$gt": 30
+      }
+    }
+  },
+  {
+    "$sort": {
+      "nome": 1
+    }
+  },
+  {
+    "$group": {
+      "_id": "$estado",
+      "pessoas_por_estado": {
+        "$sum": 1
+      }
+    }
+  }
+]

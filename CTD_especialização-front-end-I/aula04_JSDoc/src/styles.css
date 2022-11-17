@@ -1,0 +1,38 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  background-color: azure;
+  height: 100vh;
+}
+
+h1 {
+  width: 100%;
+  text-align: center;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  margin: 0 auto;
+}
+
+section div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+section div label {
+  margin-bottom: 0.5rem;
+}
+
+section div strong {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}

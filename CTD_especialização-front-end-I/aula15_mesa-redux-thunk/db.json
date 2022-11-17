@@ -1,0 +1,25 @@
+{
+  "list": [
+    {
+      "id": 1,
+      "name": "Regador de Plantas",
+      "price": 20.5
+    },
+    {
+      "id": 2,
+      "name": "Livro Estrutura de Dados",
+      "price": 50
+    },
+    {
+      "id": 3,
+      "name": "Torre de Jogo de Xadrez",
+      "price": 12
+    },
+    {
+      "id": 4,
+      "name": "Grão de Feijão Mágico",
+      "price": 5
+    }
+  ],
+  "order": []
+}

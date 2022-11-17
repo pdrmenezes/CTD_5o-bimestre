@@ -1,0 +1,74 @@
+-- MongoDB Community Edition 6 instalado pelo homebrew (https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)
+-- Compass (GUI) instalado pelo dmg (https://www.mongodb.com/try/download/compass)
+
+-- iniciar mongo pelo terminal:
+mongosh
+-- ou usar comandos no mongosh do compass
+
+-- lista comandos aplicáveis ao db
+db.help()
+
+-- listar dbs
+show dbs
+
+-- mostrar o db em uso
+db
+
+-- cria ou selecionar banco (case sensitive)
+use dbName
+
+-- deleta os documentos de uma coleção que obedecem a um determinado critério
+db.CollectionName.remove({nomeAtributo : valor do atributo})
+
+-- se nenhum atributo for informado todos os dados da coleção são excluídos
+db.CollectionName.remove({})
+
+-- exclui coleção inteira usamos o método drop();
+db.CollectionName.drop()
+
+-- exclui banco de dados em uso
+db.dropDatabase()
+
+-- listar collections
+show collections
+
+-- cria collection
+db.createCollection("nomeDaCollection")
+
+-- inserir 1 dado
+db.collectionName.insertOne({nome: "Silvio Linhares", idade: 43, cidade: "Brasília", estado: "DF", telefone: "(61) 3444-4444"})
+
+-- inserir múltiplos dados
+db.collectionName.insertMany([{nome: "Rafael Santos", idade: 30, cidade: "Recife", estado: "PE", telefone: "(81) 3888-8888"}, {nome: "Teresa Cristina", idade: 31, cidade: "Barretos", estado: "SP", telefone: "(11) 3222-2222"}])
+
+-- listar dado específico
+db.contato.find({estado: "DF"})
+
+-- listar 2 contatos formatados
+db.contato.find({}).limit(2).pretty()
+
+-- listar campo ordenado crescente (1) ou descrescente (-1)
+db.contato.find({}).sort({ nome: -1 })
+
+-- listar contatos a partir da 3ª posição (offset)
+db.contato.find().skip(3).pretty()
+
+-- listar contatos que não atendam a uma condição - not includes - "$nin:"
+db.contato.find({nome: {$nin: ["Silvio", "Rafael"]}})
+
+-- buscar dado em visualização formatada json
+db.contato.find().pretty()
+
+-- atualizar um dado no banco usando um identificador único, idealmente db.collectionName.update({\_id: "id"}, {$set: { campoASerAtualizado: "novoValor" }})
+db.contato.update({nome: "Silvio"}, {$set : {telefone: "(61) 3333-3333"}})
+ou
+db.contato.update({ \_id: ObjectId("564987657987asd")}, {$set : {telefone: "(61) 3333-3333"}})
+
+-- atualizar registros que respeitem a condição de 'menor que' - less than - "$lt: valor" -> todos os contatos com id abaixo de 85 agora terão o nome = pedro
+db.contato.updateMany({_id:{$lt:85}, {$set:{nome:"Pedro"}}})
+
+-- deletar registro do db.collectionName.deleteOne({parâmetro: "chave"})
+db.contato.deleteOne({\_id: ObjectId("564987657987asd")})
+
+-- deletar registro que possuam \_id >= 87 - greater than or equal - "$gte : valor"
+db.contato.deleteMany({_id:{$gte:87}})

@@ -1,0 +1,6 @@
+Creating React App with Typescript
+- React Scripts (create-react-app)
+  - 'npx create-react-app my-app --template typescript'
+- Vite
+  # npm 7+, extra double-dash is needed:
+  - 'npm create vite@latest my-react-app -- --template react-ts'

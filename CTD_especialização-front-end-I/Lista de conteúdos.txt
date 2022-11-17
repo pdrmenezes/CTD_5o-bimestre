@@ -1,0 +1,107 @@
+------------
+5º BIMESTRE
+------------
+
+  1º módulo: Hooks
+    Revisão de Hooks (useState / useEffect)
+    useRef / useReducer
+  
+  2º módulo: Documentação
+    JS(x) Docs
+    PropTypes
+    Casos de uso
+  
+  3º módulo: React Query
+    Introdução à react-query e casos de uso
+    useQuery - Query Keys
+    Paginação
+    Placeholder e initialData
+    Mutações - useMutation
+  
+  4º módulo: TypeScript
+    Introdução à TypeScript
+    Criar, exportar e importar tipos
+    Crie uma interface com TypeScript
+    Propriedades de digitação de um componente React
+  
+  5º módulo: Redux
+    Introdução à Redux. Princípios e ciclo geral de atualização
+    Action e Dispatcher
+    Store / Provider / Reducer
+    Redux-Thunk
+    Sagas
+
+  HIGHLIGHTS
+    1. Redux
+    2. Typescript
+    3. GraphQL
+    4. Server-Side Rendering (SSR) Next.js
+
+
+CTD -> FRONT
+
+- 1º bi -
+Ferramentas de um desenvolvedor web
+HTML
+CSS
+Modelo de caixas
+Flexbox e Grid
+Formulários
+Sass
+Animações CSS
+
+----------------------------------------
+
+- 2º bi -
+JavaScript lado do cliente
+Manuseamento do DOM
+Web e eventos reativos
+Formulários e validações
+JSON e Storage
+Assincronismo e APIs
+Animações
+
+----------------------------------------
+
+- 3º bi -
+React
+JSX
+Create React App
+Componentes e status
+Ciclos de vida
+Eventos e formulários
+APIs
+Roteamento
+Hooks
+Context
+
+----------------------------------------
+
+- 5º bi -
+Hooks (useContext / useState / useRef / UseReducer)
+JS(x) Docs
+PropTypes
+React Query
+TypeScript
+Redux: Action e Dispatcher, Store/Provider/Reducer, Thunk e Sagas
+
+----------------------------------------
+
+- 6º bi: padrões e GraphQL - 
+Padrões de design avançados
+Componente vs. composição
+Compound components
+SOLID e boas práticas
+CSS no JS e styled-components
+GraphQL - Apollo
+Continuação de TypeScript
+
+----------------------------------------
+
+- 7º bi: SSR -
+Next.js (comparação com React em Server Side Rendering)
+Testing:
+  Jest
+  React Testing Library (Interação com DOM e assincronismo)
+  Cypress
+Showcase: Mobile

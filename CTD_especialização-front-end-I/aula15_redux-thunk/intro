@@ -1,0 +1,46 @@
+aula15_redux-thunk
+
+Thunk serve pra atrasar a execução das actions caso estejamos trabalhando com outros dados e funções assíncronas
+
+1. Instalar Redux-Thunk
+   -- npm install redux-thunk
+   -- yarn add redux-thunk
+
+Thunk, dentro do contexto do Redux, age como um middleware, um intermediador entre a Action e o Reducer, que irá executar uma lógica antes de disparar uma Action.
+No caso do Thunk, iremos realizar uma lógica que envolverá uma função assíncrona.
+
+Fluxo de estado sem Thunk: Componente -> Action -> Reducer -> Store -> Componente ->>>
+Fluxo de estado com Thunk: Componente -> Action -> Middleware/Thunk -> API -> Middleware/Thunk -> Reducer -> Store -> Componente ->>>
+
+2. Configurar a Store pra que ela ofereça suporte ao Middleware/Thunk
+   2.1
+   import {createStore, applyMiddleware} from 'redux'
+
+   2.2. Importar Thunk
+   import thunk from 'redux-thunk'
+
+   2.3 Importar algum reducer
+   import orderReducer from './reducers/order.index'
+
+   2.4 Configurar Store para que suporte Middleware/Thunk passando 'thunk' como parâmetro à função 'applyMiddleware'
+   const store = createStore(orderReducer, applyMiddleware(thunk))
+
+3. Criar função 'saveOrder' que realizará requisição assíncrona à api, armazenará e apresentará o dado. Podemos criá-la no Reducer de pedidos como exemplo anterior 'orderReducer'
+   A função 'saveOrder' retornará uma função async de onde vamos obter os itens (estado) armazenado na Store em relação ao carrinho 'cartProducts'
+   Após obtenção dos itens (estado) enviaremos à API (nesse caso, usando axios)
+
+4. Por último trataremos o Status da requisição:
+   Caso efetuada com sucesso: limparemos o carrinho utilizando a Action clearCart(). Com o pedido efetuado, esvaziamos o carrinho
+
+-- Thunk / orderReducer
+export const saveOrder = () => async(dispatch, getState) => {
+// obtenção dos produtos/items/state na Store que serão enviados à API
+const order = getState().cartProducts
+await axios.post('https://fakestoreapi.com/products').then(
+// dispatch para limpar o carrinho caso retorno com sucesso
+response => dispatch(clearCart())
+).catch(
+// tratamento de erro da requisição
+error => console.log(error.message)
+)
+}

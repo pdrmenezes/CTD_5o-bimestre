@@ -1,0 +1,31 @@
+gerador de documentação JavaScript
+
+Utilizado por meio de tags
+
+@author: nome do autor do bloco documentado
+@param: definir tipo de parâmetro que recebe uma função
+@returns: valor do retorno da função
+
+------ INÍCIO DO EXEMPLO ------
+
+* return full name of the user
+
+@author   Pedro Menezes
+@param   {string}        firstName     First Name of the User
+@param   {string}        lastName      Last Name of the User
+@return  {string}                      Full Name of the User
+
+function getFullName(firstName, lastName) {
+  return `${firstName} ${lastName}`
+}
+
+------ FIM DO EXEMPLO ------
+
+* Encoda uma string em base64
+
+@param      {string}    string    Texto inserido pelo usuário
+@return     {string}              Texto encodado em base64
+
+function encodeStringToBase64(string){
+  return atob(string)
+}

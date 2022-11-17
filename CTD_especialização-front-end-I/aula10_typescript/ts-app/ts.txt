@@ -1,0 +1,7 @@
+// terminal: npm init na pasta do app pra criar um mini-app
+
+// terminal: node index.js
+// terminal: node index.ts -> dá erro porque o node, o navegador, não entendem typescript, o código tem que ser transpilado para javascript para rodar // então o pacote de typescript tem que ser instalado no app
+
+// terminal: npm install -D typescript ('-D' pra instalar como biblioteca/dependência de desenvolvimento) // se consultar o package.json ela entra em 'devDependencies'
+

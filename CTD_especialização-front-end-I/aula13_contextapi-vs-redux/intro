@@ -1,0 +1,36 @@
+-- Redux lida com mudanças de estado de forma centralizada, useContext lida à medida que acontecem no nível de cada componente
+
+Redux armazena todo o estado do aplicativo e permite que seja acessado por qualquer componente sem que esse estado tenha que ser passado como props pela árvore de componentes
+
+**Context API**
+
+- useContext é um hook
+- usado pra compartilhar dados
+- alterações feitas a partir do valor Context
+- podemos alterar o estado nele
+- renderiza novamente todos os componentes sempre que houver alguma atualização na prop de valor do provedor // provider
+- melhor usar em pequenas aplicações
+
+**Redux**
+
+- é uma biblioteca (de gerenciamento de estados)
+- é usado pra gerenciar dados e estados
+- alterações são feitas com funções puras (reducers)
+- o estado é somente leitura (readonly) e não pode ser alterado diretamente
+- renderiza apenas os componentes atualizados
+- excelente para aplicações maiores
+
+- Estados centralizados numa árvore de estado
+  -- uma espécie de array que armazena os estados dos componentes
+  -- então, para gerenciar um estado, temos que interagir com a árvore de estado
+  -- assim, as operações são separadas em funcionalidades, não mais em componentes individuais
+
+_Funcionamento_
+
+- Store é como é chamada a árvore de estado
+- 3 princípios do Redux:
+  -- Store é a única fonte da 'verdade'
+  -- estado é readonly, a única forma de alterar o estado é disparando uma action. nenhum evento do DOM ou da rede pode mudar diretamente o estado
+  -- alterações somente serão feitas a partir de funções puras, usando actions dentro de um reducer
+- Action: recurso utilizado para fazer a solicitação de atualização de estado na Store. Com a Store atualizada, todos os componentes que estiverem usando aquele estado receberão seu novo valor atualizado
+- Dispatcher: resonsável por concluir a solicitação que foi realizada por uma Action, ou seja, quem atualiza a Store

@@ -1,0 +1,49 @@
+{
+  "_id": {
+    "$oid": "6317d82e58ddc3966e0f342a"
+  },
+  "albuns": [
+    {
+      "name": "A Beautiful Lie",
+      "artist": "30 Seconds to Mars",
+      "songs": ["song 1"],
+      "cover_img_url": "https://www.deezer.com/br/album/300483"
+    },
+    {
+      "name": "An Awesome Wave",
+      "artist": "alt-J",
+      "songs": ["song 1"],
+      "cover_img_url": "https://imusic.br.com/music/5051083065580/alt-j-2012-an-awesome-wave-cd"
+    },
+    {
+      "name": "Gintama ED",
+      "artist": "amplified",
+      "songs": ["song 1"],
+      "cover_img_url": ""
+    },
+    {
+      "name": "1",
+      "artist": "The Beatles",
+      "songs": ["song 1"],
+      "cover_img_url": "https://open.spotify.com/album/7vEJAtP3KgKSpOHVgwm3Eh"
+    },
+    {
+      "name": "Enema of the State",
+      "artist": "blink-182",
+      "songs": ["song 1"],
+      "cover_img_url": "https://upload.wikimedia.org/wikipedia/pt/8/81/Enema_of_the_State.jpg"
+    },
+    {
+      "name": "Feeling This",
+      "artist": "blink-182",
+      "songs": ["song 1"],
+      "cover_img_url": "https://i.ytimg.com/vi/My5PdmwsQds/hqdefault.jpg"
+    },
+    {
+      "name": "Take Off Your Pants and Jacket",
+      "artist": "blink-182",
+      "songs": ["song 1"],
+      "cover_img_url": "https://i.scdn.co/image/ab67616d0000b27354a8f4f9158546472fbb7280"
+    }
+  ]
+}

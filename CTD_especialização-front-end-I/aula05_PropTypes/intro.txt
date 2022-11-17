@@ -1,0 +1,22 @@
+----- INSTALAR BIBLIOTECA -----
+
+npm install --save prop-types
+
+----- SINTAXE -----
+// importar import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+
+const Saudacao = ({nome}) => {
+  return <h1>Hello {nome}</h1>;
+}
+
+// declarar propTypes do objeto após o fechamento do componente
+Saudacao.propTypes = {
+  nome: PropTypes.string
+}
+
+export default Saudacao;
+
+----- APLICAÇÃO -----
+
+ver uso em "aula01_centro-pokemon/src/components/Formulario/index.jsx" e "..components/Input/index.jsx"

@@ -1,0 +1,6 @@
+Criar uma aplicação que simule o carrinho de compras de uma aplicação de e-commerce:
+1 - Adicionar item no carrinho;
+2 - Remover item do carrinho;
+3 - Finalizar comprar.
+
+Criar lista mockada de produtos com nome e preço
